@@ -37,7 +37,7 @@ __all__ = (
 # =============================================================================
 # >> GLOBAL VARIABLES
 # =============================================================================
-_config_strings = LangStrings(info.basename)
+_config_strings = LangStrings(info.name)
 _base_path = Path(__file__).parent
 
 
@@ -59,7 +59,7 @@ for _type in ('punishments', 'rewards'):
 # =============================================================================
 # >> CONFIGURATION
 # =============================================================================
-with ConfigManager(info.basename, 'sasc_') as _config:
+with ConfigManager(info.name, 'sasc_') as _config:
 
     percent_for_both = _config.cvar(
         'percent_for_both', 50, _config_strings['percent_for_both']
