@@ -6,6 +6,7 @@
 # >> IMPORTS
 # =============================================================================
 # Python
+from collections import namedtuple
 from random import choice, randint
 
 
@@ -18,6 +19,13 @@ __all__ = (
 
 
 # =============================================================================
+# >> GLOBAL VARIABLES
+# =============================================================================
+# pylint: disable=invalid-name
+Choice = namedtuple(typename='Choice', field_names=('message', 'function'))
+
+
+# =============================================================================
 # >> CLASSES
 # =============================================================================
 class _ChoiceManager(object):
@@ -26,7 +34,7 @@ class _ChoiceManager(object):
     rewards = dict()
     punishments = dict()
 
-    def reward(self, name):
+    def reward(self, name, message):
         """Decorator that registers the function as a reward."""
         if name in self.rewards:
             raise ValueError(
@@ -37,10 +45,10 @@ class _ChoiceManager(object):
 
         def inner(function):
             """Register the reward function."""
-            self.rewards[name] = function
+            self.rewards[name] = Choice(message=message, function=function)
         return inner
 
-    def punishment(self, name):
+    def punishment(self, name, message):
         """Decorator that registers the function as a punishment."""
         if name in self.punishments:
             raise ValueError(
@@ -51,7 +59,7 @@ class _ChoiceManager(object):
 
         def inner(function):
             """Register the punishment function."""
-            self.punishments[name] = function
+            self.punishments[name] = Choice(message=message, function=function)
         return inner
 
     def grant_choices(self, player):
@@ -76,12 +84,18 @@ class _ChoiceManager(object):
 
         # Are there no valid rewards?
         if not reward_choices and punishment_choices:
-            choice(punishment_choices)(player)
+            self.enact_choices_for_player(
+                choices=[choice(punishment_choices)],
+                player=player,
+            )
             return
 
         # Are there no valid punishments?
         if not punishment_choices and reward_choices:
-            choice(reward_choices)(player)
+            self.enact_choices_for_player(
+                choices=[choice(reward_choices)],
+                player=player,
+            )
             return
 
         # Find if both a reward and a punishment should be chosen
@@ -91,13 +105,22 @@ class _ChoiceManager(object):
             both = randint(1, 100) <= percent
 
         if both:
-            choice(reward_choices)(player)
-            choice(punishment_choices)(player)
-            return
-
-        if choice([0, 1]):
-            choice(reward_choices)(player)
+            choices = [choice(reward_choices), choice(punishment_choices)]
+        elif choice([0, 1]):
+            choices = [choice(reward_choices)]
         else:
-            choice(punishment_choices)(player)
+            choices = [choice(punishment_choices)]
+
+        self.enact_choices_for_player(
+            choices=choices,
+            player=player,
+        )
+
+    @staticmethod
+    def enact_choices_for_player(choices, player):
+        """Reward/punish player and send message."""
+        for item in choices:
+            item.function(player)
+            item.message.send(player.index)
 
 choice_manager = _ChoiceManager()

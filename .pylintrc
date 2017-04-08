@@ -8,7 +8,9 @@ ignore=
 # For a list of error codes, see:
 #   http://pylint-messages.wikidot.com/all-codes
 disable=
+    duplicate-code,
     import-error,
+    locally-disabled,
     no-name-in-module,
 
 

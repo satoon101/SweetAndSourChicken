@@ -37,7 +37,7 @@ __all__ = (
 # =============================================================================
 # >> GLOBAL VARIABLES
 # =============================================================================
-_config_strings = LangStrings(info.name)
+_config_strings = LangStrings(info.name + '/config')
 _base_path = Path(__file__).parent
 
 
