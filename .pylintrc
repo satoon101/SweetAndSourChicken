@@ -8,6 +8,8 @@ ignore=
 # For a list of error codes, see:
 #   http://pylint-messages.wikidot.com/all-codes
 disable=
+    import-error,
+    no-name-in-module,
 
 
 [BASIC]
@@ -54,3 +56,7 @@ msg-template={msg_id}:{line:3d},{column:2d}: {msg} ({symbol})
 ignore-imports=yes
 ignore-comments=yes
 ignore-docstrings=yes
+
+
+[VARIABLES]
+dummy-variables-rgx=map_name

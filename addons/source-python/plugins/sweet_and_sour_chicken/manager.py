@@ -20,11 +20,14 @@ __all__ = (
 # =============================================================================
 # >> CLASSES
 # =============================================================================
-class _ChoiceManager(dict):
+class _ChoiceManager(object):
+    """Class used to hold rewards/punishments."""
+
     rewards = dict()
     punishments = dict()
 
     def reward(self, name):
+        """Decorator that registers the function as a reward."""
         if name in self.rewards:
             raise ValueError(
                 'Reward "{name}" is already registered.'.format(
@@ -33,10 +36,12 @@ class _ChoiceManager(dict):
             )
 
         def inner(function):
+            """Register the reward function."""
             self.rewards[name] = function
         return inner
 
     def punishment(self, name):
+        """Decorator that registers the function as a punishment."""
         if name in self.punishments:
             raise ValueError(
                 'Punishment "{name}" is already registered.'.format(
@@ -45,10 +50,12 @@ class _ChoiceManager(dict):
             )
 
         def inner(function):
+            """Register the punishment function."""
             self.punishments[name] = function
         return inner
 
     def grant_choices(self, player):
+        """Grant the random choices for reward/punishment."""
         from .sweet_and_sour_chicken import (
             disabled_punishments, disabled_rewards, percent_for_both,
         )

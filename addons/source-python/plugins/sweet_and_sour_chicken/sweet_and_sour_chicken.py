@@ -91,6 +91,7 @@ with ConfigManager(info.name, 'sasc_') as _config:
 # =============================================================================
 @OnLevelInit
 def load(map_name=None):
+    """Set the chicken count."""
     map_info = Entity.find_or_create('info_map_parameters')
     map_info.pet_population = chicken_count.get_int()
 
