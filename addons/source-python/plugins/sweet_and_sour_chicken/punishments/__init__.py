@@ -37,10 +37,6 @@ for _ini_file in _punishment_path.files('*.ini'):
     _instance = LangStrings(_ini_file.replace(TRANSLATION_PATH, '')[1:~3])
     for _key, _value in _instance.items():
         if _key in punishment_messages:
-            warn(
-                'Translation key "{key}" is already registered.'.format(
-                    key=_key,
-                )
-            )
+            warn(f'Translation key "{_key}" is already registered.')
             continue
         punishment_messages[_key] = SayText2(_value)

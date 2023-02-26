@@ -61,4 +61,4 @@ ignore-docstrings=yes
 
 
 [VARIABLES]
-dummy-variables-rgx=map_name
+ignored-argument-names=map_name

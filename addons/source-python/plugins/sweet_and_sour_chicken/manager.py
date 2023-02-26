@@ -28,20 +28,16 @@ Choice = namedtuple(typename='Choice', field_names=('message', 'function'))
 # =============================================================================
 # >> CLASSES
 # =============================================================================
-class _ChoiceManager(object):
+class _ChoiceManager:
     """Class used to hold rewards/punishments."""
 
-    rewards = dict()
-    punishments = dict()
+    rewards = {}
+    punishments = {}
 
     def reward(self, name, message):
-        """Decorator that registers the function as a reward."""
+        """Register the function as a reward."""
         if name in self.rewards:
-            raise ValueError(
-                'Reward "{name}" is already registered.'.format(
-                    name=name,
-                )
-            )
+            raise ValueError(f'Reward "{name}" is already registered.')
 
         def inner(function):
             """Register the reward function."""
@@ -49,13 +45,9 @@ class _ChoiceManager(object):
         return inner
 
     def punishment(self, name, message):
-        """Decorator that registers the function as a punishment."""
+        """Register the function as a punishment."""
         if name in self.punishments:
-            raise ValueError(
-                'Punishment "{name}" is already registered.'.format(
-                    name=name,
-                )
-            )
+            raise ValueError(f'Punishment "{name}" is already registered.')
 
         def inner(function):
             """Register the punishment function."""
@@ -64,6 +56,8 @@ class _ChoiceManager(object):
 
     def grant_choices(self, player):
         """Grant the random choices for reward/punishment."""
+        # pylint: disable=import-outside-toplevel
+        # pylint: disable=cyclic-import
         from .sweet_and_sour_chicken import (
             disabled_punishments, disabled_rewards, percent_for_both,
         )
@@ -122,5 +116,6 @@ class _ChoiceManager(object):
         for item in choices:
             item.function(player)
             item.message.send(player.index)
+
 
 choice_manager = _ChoiceManager()
