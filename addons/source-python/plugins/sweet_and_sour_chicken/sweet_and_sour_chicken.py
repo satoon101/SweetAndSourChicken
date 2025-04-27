@@ -46,7 +46,7 @@ _base_path = Path(__file__).parent
 # =============================================================================
 for _type in ('punishments', 'rewards'):
     for _file in _base_path.joinpath(_type).files('*.py'):
-        if _file.namebase == '__init__':
+        if _file.stem == '__init__':
             continue
         import_module(
             _file.replace(

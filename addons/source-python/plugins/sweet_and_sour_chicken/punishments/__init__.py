@@ -32,7 +32,7 @@ punishment_messages = {}
 
 _punishment_path = TRANSLATION_PATH / info.name / 'punishments'
 for _ini_file in _punishment_path.files('*.ini'):
-    if _ini_file.namebase.endswith('_server'):
+    if _ini_file.stem.endswith('_server'):
         continue
     _instance = LangStrings(_ini_file.replace(TRANSLATION_PATH, '')[1:~3])
     for _key, _value in _instance.items():
